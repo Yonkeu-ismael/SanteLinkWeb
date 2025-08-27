@@ -1,4 +1,4 @@
-# SantéLink Web
+# SanteLinkWeb
 
 ## Déploiement (Vite + Vue 3 + Element Plus)
 
