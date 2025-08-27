@@ -1,4 +1,17 @@
-# SanteLinkWeb
+# SanteLinkWeb V0.0.1
+
+## Capture d’écran
+
+![Écran de connexion](public/screenshots/login.png)
+
+Astuce: placez votre capture dans `SanteLinkWeb/public/screenshots/login.png` pour qu’elle s’affiche ci‑dessus.
+
+## Capture d’écran — Tableau de bord
+
+![Tableau de bord](public/screenshots/dashboard.png)
+
+Placez le fichier ici: `SanteLinkWeb/public/screenshots/dashboard.png`.
+
 
 ## Déploiement (Vite + Vue 3 + Element Plus)
 
