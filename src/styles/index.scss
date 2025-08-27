@@ -1,0 +1,22 @@
+:root {
+  --bg-color: #f5f7fa;
+  --text-color: #1f2d3d;
+  --card-bg: #ffffff;
+  --label-color: #070a41;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0a0a0a;
+  --text-color: #e5e7eb;
+  --card-bg: #1a1a1a;
+  --label-color: #e5e7eb;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}

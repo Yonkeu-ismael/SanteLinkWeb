@@ -1,0 +1,39 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "esnext",
+		"allowJs": false,
+		"checkJs": false,
+		"jsx": "preserve",
+		"declaration": true,
+		"removeComments": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"strictNullChecks": true,
+		"preserveConstEnums": true,
+		"outDir": "./ts-out-dir",
+		"sourceMap": false,
+		"noUnusedLocals": false,
+		"resolveJsonModule": true,
+		"noUnusedParameters": false,
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"],
+			"@api/*": ["src/api/*"],
+			"@assets/*": ["src/assets/*"],
+			"@entities/*": ["src/entities/*"],
+			"@router/*": ["src/router/*"],
+			"@store/*": ["src/store/*"],
+			"@styles/*": ["src/styles/*"],
+			"@utils/*": ["src/utils/*"],
+			"@views/*": ["src/views/*"],
+			"@components/*": ["src/components/*"]
+		},
+		"lib": ["ES2018", "DOM"]
+	},
+	"include": ["src", "typings"]
+}
+
