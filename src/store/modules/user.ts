@@ -14,15 +14,37 @@ const user: Module<UserState, any> = {
   },
   actions: {
     async login({ commit }, payload) {
-      const data = await api.post('/auth/login', payload)
-      commit('SET_TOKEN', data.token)
-      return true
+      // payload peut être { email, password } ou { phoneNumber, password }
+      const data: any = await api.post('/api/v1/auth/authenticate', payload)
+      // L'API retourne { accessToken, refreshToken, expiresIn }
+      if (data.accessToken) {
+        commit('SET_TOKEN', data.accessToken)
+        return true
+      }
+      return false
+    },
+    async register({ commit, dispatch }, payload) {
+      const data: any = await api.post('/api/v1/auth/register', payload)
+      // Si l'API renvoie déjà un token
+      if (data?.accessToken) {
+        commit('SET_TOKEN', data.accessToken)
+        return true
+      }
+      // Sinon, on authentifie avec l'email et le mot de passe fournis
+      if (payload?.email && payload?.password) {
+        const ok = await (dispatch as any)('login', { email: payload.email, password: payload.password })
+        return ok
+      }
+      return false
     },
     async getUserInfo({ commit }) {
       const me = await api.get('/users/me')
       commit('SET_USER_INFO', me)
     },
-    async logout({ commit }) { commit('CLEAR_TOKEN') }
+    async logout({ commit }) {
+      try { await api.post('/api/v1/auth/logout', {}) } catch {}
+      commit('CLEAR_TOKEN')
+    }
   }
 }
 export default user
