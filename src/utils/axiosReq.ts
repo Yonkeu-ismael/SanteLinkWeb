@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router from '@/router'
 
-const baseURL = (import.meta as any).env?.VITE_APP_API_BASE || 'https://api.benss.dev.rancher.nebulageekinfra.com'
+const baseURL = (import.meta as any).env?.VITE_APP_API_BASE || 'https://api.santelink.dev.rancher.nebulageekinfra.com'
 const api = axios.create({ baseURL, timeout: 20000 })
 
 api.interceptors.request.use((config) => {

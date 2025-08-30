@@ -21,3 +21,42 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
+
+.reset-method-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  justify-content: center;
+}
+
+.reset-method-btn {
+  height: 50px;
+  font-size: 16px;
+  border-radius: 8px;
+  flex: 1;
+  max-width: 180px;
+}
+
+.reset-method-btn i {
+  margin-right: 10px;
+}
+
+.email-btn {
+  background-color: #409eff !important;
+  border-color: #409eff !important;
+}
+
+.email-btn:hover {
+  background-color: #66b1ff !important;
+  border-color: #66b1ff !important;
+}
+
+.phone-btn {
+  background-color: #67c23a !important;
+  border-color: #67c23a !important;
+}
+
+.phone-btn:hover {
+  background-color: #85ce61 !important;
+  border-color: #85ce61 !important;
+}
