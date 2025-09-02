@@ -36,6 +36,7 @@ Application web et mobile de santé connectée développée avec Vue 3, Capacito
 - **Android SDK** : API 33+
 - **Gradle** : 8.0+
 - **ADB** : Android Debug Bridge
+- **Compte Google Cloud** : Pour l'authentification OAuth
 
 ### 1. Installation des dépendances
 
@@ -72,6 +73,26 @@ Créer un fichier `.env` :
 VITE_APP_API_BASE=https://api.santelink.dev.rancher.nebulageekinfra.com
 VITE_APP_VERSION=1.0.0
 ```
+
+#### Configuration Google Identity Services
+1. **Créer un projet Google Cloud** :
+   - Allez sur [Google Cloud Console](https://console.cloud.google.com/)
+   - Créez un nouveau projet ou sélectionnez un projet existant
+   - Activez l'API Google+ API
+
+2. **Créer des identifiants OAuth 2.0** :
+   - Dans "APIs & Services" > "Credentials"
+   - Cliquez sur "Create Credentials" > "OAuth 2.0 Client IDs"
+   - Sélectionnez "Web application"
+
+3. **Configurer les origines autorisées** :
+   - **Origines JavaScript autorisées** : `http://localhost:5001`
+   - **URLs de redirection autorisées** : `http://localhost:5001`
+
+4. **Mettre à jour la configuration** :
+   - Modifiez `src/config/googleAuth.ts`
+   - Remplacez `YOUR_GOOGLE_CLIENT_ID` par votre Client ID
+   - **Note** : Plus besoin de Client Secret avec Google Identity Services
 
 #### Configuration Capacitor
 Le fichier `capacitor.config.ts` est configuré pour :

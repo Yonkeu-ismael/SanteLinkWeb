@@ -104,7 +104,7 @@
         <div class="name">{{ t('welcome') }}</div>
       </div>
 
-      <div class="navigation-buttons">
+      <!-- <div class="navigation-buttons">
         <button class="nav-arrow left-arrow" @click="previousSlide">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -115,8 +115,7 @@
             <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-      </div>
-
+      </div> -->
       <p class="quote">
         {{ t('welcomeQuote') }}
         <br />
@@ -125,13 +124,13 @@
     </div>
 
     <!-- Composant de réinitialisation de mot de passe -->
-    <ResetPasswordForm
+    <!-- <ResetPasswordForm
       ref="resetPasswordRef"
       :loading="loading"
       @send-otp="handleSendOtp"
       @reset-password="handleResetPassword"
       @close="handleCloseReset"
-    />
+    /> -->
   </div>
 </template>
 
@@ -142,6 +141,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { t as T } from '@/i18n'
 import ResetPasswordForm from './components/ResetPasswordForm.vue'
+import { googleAuthService } from '@/services/googleAuthService'
 
 const t = (key: Parameters<typeof T>[0]) => T(key)
 
@@ -189,8 +189,31 @@ const handleLogin = async () => {
   }
 }
 
-const handleGoogleLogin = () => {
-  ElMessage.info(t('googleLoginNotImplemented'))
+const handleGoogleLogin = async () => {
+  try {
+    ElMessage.info(t('connectingToGoogle'))
+    
+    // Détecter si on est sur mobile
+    if ((window as any).Capacitor?.isNative) {
+      await googleAuthService.authenticateMobile()
+    } else {
+      await googleAuthService.authenticate()
+    }
+    
+    ElMessage.success(t('googleLoginSuccess'))
+    router.push('/dashboard')
+    
+  } catch (error: any) {
+    console.error('Erreur lors de l\'authentification Google:', error)
+    
+    if (error.message.includes('popup')) {
+      ElMessage.error(t('popupBlocked'))
+    } else if (error.message.includes('Timeout')) {
+      ElMessage.error(t('authenticationTimeout'))
+    } else {
+      ElMessage.error(t('googleLoginError'))
+    }
+  }
 }
 
 const handleAppleLogin = () => {
@@ -872,13 +895,13 @@ onMounted(() => {
   }
   
   .login .footer {
-    padding: 16px 20px;
-    height: auto;
-    margin-top: 20px;
+    display: none;
   }
   
   .login .section-2 {
     padding: 20px;
+    min-height: 200px;
+    order: 1;
   }
   
   .login .name {
@@ -931,8 +954,12 @@ onMounted(() => {
   }
   
   .login .footer {
-    padding: 12px 16px;
-    margin-top: 16px;
+    display: none;
   }
+  .login .section-2 {
+    min-height: 180px;
+    padding: 16px;
+  }
+
 }
 </style>

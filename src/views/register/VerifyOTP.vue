@@ -90,18 +90,28 @@
                 :disabled="isResending"
                 class="resend-button"
               >
-                <span v-if="isResending">⏳ Envoi en cours...</span>
-                <span v-else>🔄 Renvoyer le code</span>
+                <span v-if="isResending">{{ t('sending') }}</span>
+                <span v-else>{{ t('resendCode') }}</span>
               </button>
               <p v-else class="resend-text">
-                {{ t('resendCodeIn') }} {{ formatTime(timeLeft) }}
+                {{ t('resendCodeIn') }} 
               </p>
             </div>
           </div>
         </div>
       </div>
-
       <footer class="footer">
+        <p class="bottom-links">
+            <span class="text-wrapper-4">
+              {{ t('bySigningUpText') }} <br />
+            </span>
+
+            <span class="text-wrapper-5">{{ t('termsOfService') }}</span>
+
+            <span class="text-wrapper-4"> {{ t('and') }} </span>
+
+            <span class="text-wrapper-5">{{ t('privacyPolicy') }}</span>
+          </p>
         <div class="text">© SanteLink 2025</div>
       </footer>
     </div>
@@ -362,7 +372,7 @@ const goBack = () => {
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   position: relative;
   width: 640px;
   background: var(--card-bg);
@@ -383,7 +393,7 @@ const goBack = () => {
   display: none;
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: 5px;
   z-index: 100;
   width: auto;
   height: auto;
@@ -655,11 +665,12 @@ const goBack = () => {
 }
 
 .OTP .footer {
-  align-items: flex-end;
+  align-items: center;
   align-self: stretch;
   background-color: transparent;
   display: flex;
-  height: 96px;
+  flex-direction: column;
+  justify-content: flex-end;
   padding: 32px;
   position: relative;
   width: 100%;
@@ -674,6 +685,38 @@ const goBack = () => {
   position: relative;
   white-space: nowrap;
   width: fit-content;
+}
+
+.OTP .bottom-links {
+  color: #6b7280;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-top: 16px;
+  position: relative;
+  text-align: center;
+}
+
+.OTP .text-wrapper-4 {
+  color: #6b7280;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.OTP .text-wrapper-5 {
+  color: #0a4a6f;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.OTP .text-wrapper-5:hover {
+  text-decoration: underline;
 }
 
 .OTP .section-2 {
@@ -843,7 +886,7 @@ const goBack = () => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 834px) {
   .OTP {
     flex-direction: column;
     height: auto;
@@ -852,9 +895,10 @@ const goBack = () => {
   
   .OTP .section {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100vh; /* S'assurer que la section prend toute la hauteur */
+    /* justify-content: space-between; */
   }
-  
+
   .OTP .section-2 {
     display: none;
   }
@@ -884,10 +928,28 @@ const goBack = () => {
   }
   
   .OTP .footer {
-    height: 80px;
-    padding: 20px;
+    /* display: none; */ /* Retiré pour rendre le footer visible sur mobile */
+    padding: 16px 0;
+    justify-content: center;
+    height: auto; /* Permettre au footer de s'adapter à son contenu */
   }
-  
+
+  .OTP .text {
+    display: none; /* Masquer le copyright en mode mobile */
+  }
+
+  .OTP .bottom-links {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--card-bg);
+    padding: 16px 32px;
+    z-index: 1000;
+    text-align: center;
+    border-top: 1px solid #e5e7eb;
+  }
+
   .OTP .input-field {
     width: 100%;
     max-width: 341px;

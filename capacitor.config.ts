@@ -25,7 +25,10 @@ const config: CapacitorConfig = {
 
     App: {
       url: 'https://santelink.app'
-    }
+    },
+
+    // Google Identity Services est géré côté web
+    // Pas de configuration OAuth2 nécessaire pour Capacitor
   },
   android: {
     allowMixedContent: true,

@@ -28,7 +28,9 @@
       <div class="header-navigation">
         <div class="logo-container">
           <img src="/images/SanteLink.svg" alt="SanteLink" class="logo" />
+          
         </div>
+        
       </div>
 
       <div class="container">
@@ -100,21 +102,22 @@
               </div>
             </div>
 
-            <button class="button" @click="handleContinue" :disabled="!phoneNumber.trim() || isSending">
-              <button class="button-2">
-                <span v-if="isSending">Envoi en cours...</span>
-                <span v-else>{{ t('continue') }}</span>
-              </button>
-            </button>
 
-            <p class="already-have-an">
-              <span class="span">{{ t('alreadyHaveAccount') }} </span>
 
-              <span class="text-wrapper-3" @click="goToLogin">{{ t('signIn') }}</span>
-            </p>
           </div>
 
-          <p class="by-signing-up-or">
+        </div>
+      </div>
+
+      <footer class="">
+        <button class="button" @click="handleContinue" :disabled="!phoneNumber.trim() || isSending">
+          <button class="button-2">
+            <span v-if="isSending">Envoi en cours...</span>
+            <span v-else>{{ t('continue') }}</span>
+          </button>
+        </button>
+
+        <p class="by-signing-up-or">
             <span class="text-wrapper-4">
               {{ t('bySigningUpText') }} <br />
             </span>
@@ -125,11 +128,6 @@
 
             <span class="text-wrapper-5">{{ t('privacyPolicy') }}</span>
           </p>
-        </div>
-      </div>
-
-      <footer class="footer">
-        <div class="text-3">© SanteLink 2025</div>
       </footer>
     </div>
 
@@ -774,6 +772,7 @@ const nextSlide = () => {
 </script>
 
 <style scoped>
+
 .sign-up {
   align-items: center;
   background-color: var(--bg-color);
@@ -809,7 +808,7 @@ const nextSlide = () => {
   display: none;
   position: absolute;
   top: 20px;
-  left: 20px;
+  left: 5px;
   z-index: 100;
   width: auto;
   height: auto;
@@ -903,7 +902,7 @@ const nextSlide = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 24px;
+  gap: 48px;
   position: relative;
   width: 100%;
 }
@@ -1150,37 +1149,9 @@ const nextSlide = () => {
   width: fit-content;
 }
 
-.sign-up .already-have-an {
-  align-self: stretch;
-  color: transparent;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  position: relative;
-  text-align: center;
-}
 
-.sign-up .span {
-  color: var(--text-color);
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-}
 
-.sign-up .text-wrapper-3 {
-  color: #0a4a6f;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-  cursor: pointer;
-}
 
-.sign-up .text-wrapper-3:hover {
-  text-decoration: underline;
-}
 
 .sign-up .by-signing-up-or {
   align-self: stretch;
@@ -1191,6 +1162,7 @@ const nextSlide = () => {
   line-height: 18px;
   position: relative;
   text-align: center;
+  margin-top: 30px;
 }
 
 .sign-up .text-wrapper-4 {
@@ -1364,17 +1336,21 @@ const nextSlide = () => {
   }
   
   .sign-up .header-navigation {
-    height: 80px;
-    padding: 20px;
+    height: 2px;
+    padding: 10px;
   }
   
   .sign-up .container {
     padding: 0 20px;
   }
   
-  .sign-up .footer {
-    height: 80px;
-    padding: 20px;
+
+  /* .sign-up .footer {
+    display: none;
+  } */
+  
+  .sign-up .div {
+    gap: 40px;
   }
 }
 

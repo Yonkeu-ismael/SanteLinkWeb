@@ -2,6 +2,15 @@
   <div class="getting-started">
     <!-- Section image (en haut sur mobile) -->
     <div class="section-2">
+      <div class="name-and-text">
+        <div class="name">{{ t('welcome') }}</div>
+      </div>
+
+      <p class="quote">
+        {{ t('welcomeQuote') }}
+        <br />
+        {{ t('letsGetStarted') }}
+      </p>
     </div>
 
     <!-- Section contenu (en bas sur mobile) -->
@@ -37,6 +46,7 @@
         <div class="content">
           <div class="div">
             <h1 class="mobile-title">{{ t('welcome') }}</h1>
+            <h1 class="main-title">{{ t('appName') }}</h1>
             <p class="p">{{ t('beginJourney') }}</p>
           </div>
 
@@ -94,6 +104,7 @@ import { useRouter } from 'vue-router'
 import { t as T, setLang, currentLang } from '@/i18n'
 import { ElMessage } from 'element-plus'
 import { isDark, toggleTheme } from '@/utils/theme'
+import { googleAuthService } from '@/services/googleAuthService'
 
 
 const t = (key: Parameters<typeof T>[0]) => T(key)
@@ -115,8 +126,31 @@ const goToSignUp = () => {
   router.push('/signup')
 }
 
-const handleGoogleLogin = () => {
-  ElMessage.info(t('googleLoginNotImplemented'))
+const handleGoogleLogin = async () => {
+  try {
+    ElMessage.info(t('connectingToGoogle'))
+    
+    // Détecter si on est sur mobile
+    if ((window as any).Capacitor?.isNative) {
+      await googleAuthService.authenticateMobile()
+    } else {
+      await googleAuthService.authenticate()
+    }
+    
+    ElMessage.success(t('googleLoginSuccess'))
+    router.push('/dashboard')
+    
+  } catch (error: any) {
+    console.error('Erreur lors de l\'authentification Google:', error)
+    
+    if (error.message.includes('popup')) {
+      ElMessage.error(t('popupBlocked'))
+    } else if (error.message.includes('Timeout')) {
+      ElMessage.error(t('authenticationTimeout'))
+    } else {
+      ElMessage.error(t('googleLoginError'))
+    }
+  }
 }
 
 const handleAppleLogin = () => {
@@ -241,16 +275,20 @@ const handleAppleLogin = () => {
     width: 100%;
     flex: 1;
     justify-content: flex-start;
+    /* Ajouter de l'espace en mode web */
+    margin-top: 20px;
   }
 
 .getting-started .content {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
   position: relative;
   width: 360px;
+  /* Centrer le contenu verticalement en mode web */
+  margin-top: 20px;
 }
 
 .getting-started .div {
@@ -281,7 +319,7 @@ const handleAppleLogin = () => {
   font-size: 14px;
   font-weight: 500;
   position: relative;
-  text-align: center;
+  text-align: left;
 }
 
 .getting-started .mobile-title {
@@ -292,6 +330,18 @@ const handleAppleLogin = () => {
   font-size: 30px;
   font-weight: 700;
   line-height: 38px;
+  margin: 0 0 8px 0;
+  position: relative;
+  text-align: left;
+}
+
+.getting-started .main-title {
+  align-self: stretch;
+  color: #000000;
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 40px;
   margin: 0 0 8px 0;
   position: relative;
   text-align: left;
@@ -356,6 +406,8 @@ const handleAppleLogin = () => {
   border-color: #9ca3af;
   transform: translateY(-1px);
 }
+
+
 
 .getting-started .google-btn {
   background-color: #ffffff;
@@ -513,7 +565,7 @@ const handleAppleLogin = () => {
   width: 688px;
 }
 
-/* Responsive pour mobile */
+/* Responsive pour mobile et tablette */
 @media (max-width: 1024px) {
   .getting-started {
     flex-direction: column;
@@ -543,10 +595,15 @@ const handleAppleLogin = () => {
     display: none;
   }
   
+  /* Réduire l'espacement en mode mobile/tablette */
+  .getting-started .container {
+    margin-top: 0px;
+  }
+  
   .getting-started .content {
     align-items: flex-start;
     text-align: left;
-    gap: 28px;
+    gap: 20px;
     width: 100%;
     max-width: 480px;
     margin-top: 20px;
@@ -557,18 +614,23 @@ const handleAppleLogin = () => {
     font-size: 16px;
   }
   
+  .getting-started .main-title {
+    font-size: 28px;
+    line-height: 36px;
+    margin-bottom: 8px;
+  }
+  
   .getting-started .button {
-    padding: 16px 32px;
-    font-size: 16px;
+    padding: 14px 28px;
   }
   
   .getting-started .button-social {
-    padding: 16px 32px;
-    font-size: 16px;
+    padding: 14px 28px;
+    font-size: 12px;
   }
   
   .getting-started .button-text {
-    font-size: 16px;
+    font-size: 12px;
   }
   
   .getting-started .header-navigation {
@@ -596,21 +658,18 @@ const handleAppleLogin = () => {
     padding: 8px;
   }
   
-    .getting-started .name-and-text {
-    left: 24px;
-    top: 80px;
-    width: calc(100% - 48px);
-  }
-  
-  .getting-started .name {
-    font-size: 36px;
+  /* Masquer le texte sur l'image en mode mobile/tablette */
+  .getting-started .name-and-text {
+    display: none;
   }
   
   .getting-started .quote {
-    left: 24px;
-    top: 200px;
-    width: calc(100% - 48px);
-    font-size: 24px;
+    display: none;
+  }
+  
+  /* Masquer le titre principal en mode mobile/tablette */
+  .getting-started .main-title {
+    display: none;
   }
 }
 
@@ -621,9 +680,9 @@ const handleAppleLogin = () => {
   }
   
   .getting-started .header-navigation {
-    padding: 16px 20px;
+    padding: 1px 20px;
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
   }
   
   .getting-started .header-controls {
@@ -646,7 +705,7 @@ const handleAppleLogin = () => {
   .getting-started .container {
     padding: 0 20px;
     justify-content: flex-start;
-    gap: 20px;
+    gap: 16px;
   }
   
   .getting-started .footer {
@@ -662,28 +721,6 @@ const handleAppleLogin = () => {
     order: 1;
   }
   
-  .getting-started .name-and-text {
-    left: 20px;
-    top: 60px;
-    width: calc(100% - 40px);
-  }
-  
-  .getting-started .quote {
-    left: 20px;
-    top: 140px;
-    width: calc(100% - 40px);
-  }
-  
-
-  
-  .getting-started .name {
-    font-size: 28px;
-  }
-  
-  .getting-started .quote {
-    font-size: 20px;
-  }
-  
   .getting-started .logo {
     width: 140px;
     height: 20px;
@@ -697,7 +734,7 @@ const handleAppleLogin = () => {
   }
   
   .getting-started .content {
-    gap: 20px;
+    gap: 16px;
     width: 100%;
     max-width: 320px;
   }
@@ -713,14 +750,6 @@ const handleAppleLogin = () => {
   
   .getting-started .mobile-title {
     display: none;
-  }
-  
-  .getting-started .name {
-    font-size: 24px;
-  }
-  
-  .getting-started .quote {
-    font-size: 18px;
   }
   
 
@@ -759,27 +788,32 @@ const handleAppleLogin = () => {
   
   .getting-started .container {
     padding: 0 16px;
-    gap: 16px;
+    gap: 12px;
   }
   
   .getting-started .content {
-    gap: 16px;
+    gap: 12px;
     max-width: 280px;
   }
   
   .getting-started .div {
-    gap: 12px;
+    gap: 8px;
   }
   
-  .getting-started .name-and-text {
-    left: 16px;
-    top: 50px;
+  .getting-started .button {
+    padding: 12px 24px;
   }
   
-  .getting-started .quote {
-    left: 16px;
-    top: 120px;
+  .getting-started .button-social {
+    padding: 12px 24px;
+    font-size: 11px;
   }
+  
+  .getting-started .button-text {
+    font-size: 11px;
+  }
+  
+
   
 
 }

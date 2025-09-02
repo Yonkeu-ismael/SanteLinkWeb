@@ -842,4 +842,16 @@ const goBack = () => {
     height: 20px;
   }
 }
+
+@media (max-width: 768px) {
+  .register-complete .footer {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-complete .content {
+    max-width: 300px;
+  }
+}
 </style>
