@@ -19,7 +19,8 @@ node_modules/
 /build/
 /.output/
 coverage/
-
+#vue figma
+figma/
 # Android / Capacitor
 android/
 android-app/
