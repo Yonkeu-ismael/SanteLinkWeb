@@ -13,6 +13,55 @@
   --label-color: #e5e7eb;
 }
 
+/* Styles responsifs globaux */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+  .el-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .el-input__inner {
+    height: 44px;
+    font-size: 16px; /* Évite le zoom sur iOS */
+  }
+  
+  .el-button {
+    height: 44px;
+    font-size: 16px;
+  }
+  
+  .el-card {
+    border-radius: 12px;
+    margin: 10px;
+  }
+}
+
+/* Responsive pour très petits écrans */
+@media (max-width: 480px) {
+  .el-form-item {
+    margin-bottom: 12px;
+  }
+  
+  .el-input__inner {
+    height: 48px;
+  }
+  
+  .el-button {
+    height: 48px;
+  }
+}
+
 html, body, #app {
   height: 100%;
 }

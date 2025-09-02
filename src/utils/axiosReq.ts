@@ -1,9 +1,14 @@
 import axios from 'axios'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router from '@/router'
+import { getApiConfig, getBaseURL, getDefaultHeaders, getTimeout } from '@/config/api'
 
-const baseURL = (import.meta as any).env?.VITE_APP_API_BASE || 'https://api.santelink.dev.rancher.nebulageekinfra.com'
-const api = axios.create({ baseURL, timeout: 20000 })
+const apiConfig = getApiConfig()
+const api = axios.create({ 
+  baseURL: apiConfig.baseURL, 
+  timeout: apiConfig.timeout,
+  headers: apiConfig.headers
+})
 
 api.interceptors.request.use((config) => {
   const token = getToken()
@@ -38,7 +43,7 @@ api.interceptors.response.use(
       try {
         // Appel direct via axios de base pour éviter l'intercepteur
         const resp = await axios.post(
-          baseURL + '/api/v1/auth/refreshToken',
+          apiConfig.baseURL + '/api/v1/auth/refreshToken',
           { token: oldToken },
           { headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, timeout: 15000 }
         )

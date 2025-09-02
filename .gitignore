@@ -20,6 +20,16 @@ node_modules/
 /.output/
 coverage/
 
+# Android / Capacitor
+android/
+android-app/
+*.apk
+*.aab
+*.keystore
+*.jks
+debug.keystore
+release.keystore
+
 # Vite / Cache
 .vite/
 .cache/

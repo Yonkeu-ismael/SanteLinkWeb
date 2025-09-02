@@ -1,7 +1,7 @@
 import router from '@/router'
 import store from '@/store'
 
-const whiteList = ['/login']
+const whiteList = ['/login', '/', '/signup', '/register', '/register/verify']
 
 router.beforeEach(async (to, _from, next) => {
   const hasToken = !!(store.state as any).user?.token

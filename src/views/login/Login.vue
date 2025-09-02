@@ -1,242 +1,257 @@
 <template>
-  <div class="container">
-    <div class="login-form">
-      <el-row :gutter="20" justify="center">
-        <el-col :span="24">
-          <div class="logo-wrapper">
-            <div class="vue-logo" aria-hidden="true">
-              <svg viewBox="0 0 261.76 226.69" xmlns="http://www.w3.org/2000/svg" width="64" height="64">
-                <path d="M130.88 0L98.16 56.67 65.44 0H0l98.16 170.02L196.32 0h-65.44z" fill="#41b883"/>
-                <path d="M130.88 0L98.16 56.67 65.44 0H39.26l58.9 102.06L157.06 0h-26.18z" fill="#35495e"/>
-              </svg>
-            </div>
-            <h3 class="title">SanteLink</h3>
-            <el-switch
-              v-model="isDark"
-              active-text="Sombre"
-              inactive-text="Clair"
-              inline-prompt
-              @change="toggleTheme"
-            />
-          </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20" justify="center">
-        <el-col :span="24">
-          <el-card class="login-card">
-            <template v-if="!showRegister">
-              <h4 style="text-align: center" class="mb-2 connextion-title title">{{ t('title') }}</h4>
-              <el-form ref="formRef" :model="loginForm" :rules="rules" label-position="top" @submit.prevent>
-                <el-form-item prop="email" :label="t('email')" name="email">
-                  <el-input v-model="loginForm.email" />
-                </el-form-item>
-                <el-form-item prop="password" :label="t('password')">
-                  <el-input v-model="loginForm.password" name="password" type="password" show-password />
-                </el-form-item>
-                <div class="forgot-inline">
-                  <a class="appActionLink forgot-link" @click="forgotPassword">{{ t('forgot') }}</a>
-                </div>
-                <el-form-item class="my-3">
-                  <el-button :loading="loading" @click="logIn" class="main-login-btn" style="width: 100% !important">
-                    {{ t('login') }}
-                  </el-button>
-                </el-form-item>
-                <div class="social-buttons">
-                  <button type="button" class="social-btn google-btn" @click="signInWithGoogle">
-                    <span class="social-icon" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 48 48">
-                        <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.9 32.6 29.4 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 3l5.7-5.7C33.5 6.1 28.9 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.2-.1-2.3-.4-3.5z"/>
-                        <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16.4 18.9 14 24 14c3 0 5.7 1.1 7.8 3l5.7-5.7C33.5 6.1 28.9 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"/>
-                        <path fill="#4CAF50" d="M24 44c5.3 0 10.2-2 13.8-5.2l-6.4-5.2C29.4 36 26.9 37 24 37c-5.3 0-9.8-3.4-11.4-8.1l-6.6 5.1C8.2 39.7 15.5 44 24 44z"/>
-                        <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1 2.9-3.1 5.2-5.8 6.6l.1.1 6.4 5.2c-.5.5 8-4.7 8-15.9 0-1.2-.1-2.3-.4-3.5z"/>
-                      </svg>
-                    </span>
-                    <span class="social-text">Sign in with Google</span>
-                  </button>
-                  <button type="button" class="social-btn apple-btn" @click="signInWithApple">
-                    <span class="social-icon" aria-hidden="true">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 448 512" fill="#fff">
-                        <path d="M350.6 129.5c-17.6 20.8-46.2 36.9-73.6 34.7-3.6-26.2 10.4-54.3 26.6-71.3 18.7-20.5 51.1-35.9 77.4-36.9 3.3 26.9-9.1 54.5-30.4 73.5zM400 336.3c-5.9 13-8.7 19-16.2 31-10.5 17-25.3 38.3-43.6 38.4-16.4.1-20.6-10.9-43.1-10.8-22.5.1-27 10.9-43.4 10.8-18.3-.1-32.3-19.6-42.8-36.6-29.4-46.5-51.8-131.7-21.6-189.2 15-28.4 41.7-46.4 71.1-46.6 16.6-.2 32.4 11.3 43.1 11.3 10.6 0 29.7-13.9 50.2-11.8 8.6.4 32.7 3.5 48.1 26.6-1.3.8-28.8 16.8-28.8 49.9.1 39.9 32.8 53.2 33 53.3-.2.5-5.1 17.7-12.5 33.7z"/>
-                      </svg>
-                    </span>
-                    <span class="social-text" style="color:#fff;">Sign in with Apple</span>
-                  </button>
-                </div>
-                <el-form-item>
-                  <div class="form-actions actions-row">
-                    <div>
-                      <span class="muted">{{ t('noAccount') }} </span>
-                      <a class="register-link" @click="showRegister = true">{{ t('register') }}</a>
-                    </div>
-                  </div>
-                  <div class="form-actions language-row">
-                    <el-select v-model="lang" class="lang-select" size="small" @change="onLangChange" style="width: 120px;">
-                      <el-option label="Français" value="fr" />
-                      <el-option label="English" value="en" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-              </el-form>
-            </template>
-            <template v-else>
-              <h4 style="text-align: center" class="mb-2 connextion-title title">{{ t('registerTitle') }}</h4>
-              <el-form ref="formRefRegister" :model="registerForm" :rules="rulesRegister" label-position="top" @submit.prevent>
-                <el-form-item prop="firstName" :label="t('firstName')">
-                  <el-input v-model="registerForm.firstName" />
-                </el-form-item>
-                <el-form-item prop="lastName" :label="t('lastName')">
-                  <el-input v-model="registerForm.lastName" />
-                </el-form-item>
-                <el-form-item prop="email" :label="t('email')" name="email">
-                  <el-input v-model="registerForm.email" />
-                </el-form-item>
-                <el-form-item prop="phoneNumber" :label="t('phoneNumber')">
-                  <el-input v-model="registerForm.phoneNumber" />
-                </el-form-item>
-                <el-form-item prop="password" :label="t('password')">
-                  <el-input v-model="registerForm.password" name="password" type="password" show-password />
-                </el-form-item>
-                <el-form-item prop="confirmPassword" :label="t('confirmPassword')">
-                  <el-input v-model="registerForm.confirmPassword" name="confirmPassword" type="password" show-password />
-                </el-form-item>
-                <el-form-item prop="age" :label="t('age')">
-                  <el-input v-model.number="registerForm.age" type="number" min="0" />
-                </el-form-item>
-                <el-form-item class="my-3">
-                  <el-button :loading="loading" @click="register" class="appMainButton" style="width: 100% !important">
-                    {{ t('register') }}
-                  </el-button>
-                </el-form-item>
-                <el-form-item>
-                  <div class="form-actions">
-                    <div class="left-actions">
-                      <a class="appActionLink" @click="showRegister = false">{{ t('login') }}</a>
-                    </div>
-                    <el-select v-model="lang" class="lang-select" size="small" @change="onLangChange" style="width: 120px;">
-                      <el-option label="Français" value="fr" />
-                      <el-option label="English" value="en" />
-                    </el-select>
-                  </div>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div>
-    
-    <!-- Dialog de sélection de méthode de réinitialisation -->
-    <el-dialog
-      v-model="showResetMethodDialog"
-      :title="t('forgot')"
-      width="400px"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-      center
-    >
-      <div class="reset-method-dialog">
-        <p class="reset-method-text">{{ t('selectResetMethod') }}</p>
-        <div class="reset-method-buttons">
-          <el-button 
-            type="primary" 
-            size="large" 
-            class="reset-method-btn email-btn"
-            @click="selectResetMethod('email')"
-          >
-            <i class="el-icon-message"></i>
-            {{ t('resetByEmail') }}
-          </el-button>
-          <el-button 
-            type="primary" 
-            size="large" 
-            class="reset-method-btn phone-btn"
-            @click="selectResetMethod('phone')"
-          >
-            <i class="el-icon-phone"></i>
-            {{ t('resetByPhone') }}
-          </el-button>
+  <div class="login">
+    <div class="section">
+      <!-- Flèche de retour mobile -->
+      <div class="mobile-back-button" @click="goBack">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      
+      <div class="header-navigation">
+                <div class="logo-section">
+          <img src="/images/SanteLink.svg" alt="SanteLink Logo" class="logo-instance" />
         </div>
       </div>
-    </el-dialog>
-    
-    <!-- Dialog de réinitialisation de mot de passe -->
-    <el-dialog
-      v-model="showResetPassword"
-      :title="resetMethod === 'email' ? t('resetByEmail') : t('resetByPhone')"
-      width="450px"
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
-    >
-      <el-form ref="formRef" :model="resetPasswordForm" :rules="resetPasswordRules" label-position="top" @submit.prevent>
-        <!-- Champ email ou téléphone selon la méthode -->
-        <el-form-item v-if="resetMethod === 'email'" prop="email" :label="t('email')" name="email">
-          <el-input v-model="resetPasswordForm.email" />
-        </el-form-item>
-        <el-form-item v-else prop="phoneNumber" :label="t('phoneNumber')" name="phoneNumber">
-          <el-input v-model="resetPasswordForm.phoneNumber" />
-        </el-form-item>
-        
-        <!-- Bouton d'envoi OTP -->
-        <el-form-item>
-          <el-button @click="sendOtp" :loading="loading" class="otp-btn" style="width: 100% !important">
-            {{ t('sendOtp') }}
-          </el-button>
-        </el-form-item>
-        
-        <!-- Champ code OTP -->
-        <el-form-item prop="otpCode" :label="t('otpCode')" name="otpCode">
-          <el-input v-model="resetPasswordForm.otpCode" placeholder="123456" maxlength="6" />
-        </el-form-item>
-        
-                        <!-- Nouveau mot de passe -->
-                <el-form-item prop="newPassword" :label="t('newPassword')">
-                  <el-input v-model="resetPasswordForm.newPassword" name="newPassword" type="password" show-password />
-                </el-form-item>
-        <el-form-item prop="confirmNewPassword" :label="t('confirmPassword')">
-          <el-input v-model="resetPasswordForm.confirmNewPassword" name="confirmNewPassword" type="password" show-password />
-        </el-form-item>
-      </el-form>
-      
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="showResetPassword = false">{{ t('cancel') }}</el-button>
-          <el-button type="primary" :loading="loading" @click="resetPassword">
-            {{ t('resetButton') }}
-          </el-button>
+
+      <div class="container">
+        <div class="content">
+          <div class="frame">
+            <div class="frame">
+              <div class="div">
+                <div class="text-wrapper">{{ t('welcomeBack') }}</div>
+                <p class="p">{{ t('pleaseEnterFormToLogin') }}</p>
+              </div>
+
+              <div class="div-2">
+                <div class="div">
+                  <div class="text">{{ t('emailOrUsername') }}</div>
+                  <div class="input-form">
+                    <input 
+                      v-model="form.emailOrUsername" 
+                      type="text" 
+                      class="text-2" 
+                      :placeholder="t('enterYourEmailOrUsername')"
+                    />
+                  </div>
+                </div>
+
+                <div class="password">
+                  <div class="div">
+                    <div class="text">{{ t('password') }}</div>
+                    <div class="input-form">
+                      <input 
+                        v-model="form.password" 
+                        :type="showPassword ? 'text' : 'password'" 
+                        class="text-2" 
+                        :placeholder="t('enterYourPassword')"
+                      />
+                      <button class="icon-btn" @click="togglePassword">
+                        <svg class="icon-instance-node" viewBox="0 0 24 24">
+                          <path fill="currentColor" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <!-- <div class="text-wrapper-2" @click="handleForgotPassword">{{ t('forgot') }}</div> -->
+                  <div class="text-wrapper-2" @click="">{{ t('forgot') }}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="div-2">
+              <button class="button" @click="handleLogin" :disabled="loading">
+                <span class="button-2">{{ loading ? t('signingIn') : t('signIn') }}</span>
+              </button>
+
+              <div class="divider"></div>
+
+              <div class="button-group">
+                <button class="button-social google-btn" @click="handleGoogleLogin">
+                  <svg class="social-icon" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  <span>{{ t('continueWithGoogle') }}</span>
+                </button>
+                
+                <button class="button-social apple-btn" @click="handleAppleLogin">
+                  <svg class="social-icon" viewBox="0 0 24 24">
+                    <path fill="#FFFFFF" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                  <span>{{ t('continueWithApple') }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="don-t-have-an">
+            <span class="span">{{ t('noAccount') }} </span>
+            <span class="text-wrapper-3" @click="goToWelcome">{{ t('register') }}</span>
+          </p>
         </div>
-      </template>
-    </el-dialog>
+      </div>
+
+      <footer class="footer">
+        <div class="text-3">© SanteLink 2025</div>
+      </footer>
+    </div>
+
+    <div class="section-2">
+      <div class="name-and-text">
+        <div class="name">{{ t('welcome') }}</div>
+      </div>
+
+      <div class="navigation-buttons">
+        <button class="nav-arrow left-arrow" @click="previousSlide">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="nav-arrow right-arrow" @click="nextSlide">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="quote">
+        {{ t('welcomeQuote') }}
+        <br />
+        {{ t('letsGetStarted') }}
+      </p>
+    </div>
+
+    <!-- Composant de réinitialisation de mot de passe -->
+    <ResetPasswordForm
+      ref="resetPasswordRef"
+      :loading="loading"
+      @send-otp="handleSendOtp"
+      @reset-password="handleResetPassword"
+      @close="handleCloseReset"
+    />
   </div>
-  
 </template>
+
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { t as T, setLang, currentLang } from '@/i18n'
+import { t as T } from '@/i18n'
+import ResetPasswordForm from './components/ResetPasswordForm.vue'
+
+const t = (key: Parameters<typeof T>[0]) => T(key)
 
 const store = useStore()
 const router = useRouter()
 const loading = ref(false)
-const isDark = ref((localStorage.getItem('theme') || 'light') === 'dark')
-const lang = ref<'fr' | 'en'>(currentLang.value)
-const showRegister = ref(false)
+const showPassword = ref(false)
+const currentSlide = ref(0)
+const resetPasswordRef = ref()
 
-const loginForm = ref({
-  email: '',
+const form = ref({
+  emailOrUsername: '',
   password: ''
 })
 
-const formRef = ref<any>(null)
-const formRefRegister = ref<any>(null)
-const t = (key: Parameters<typeof T>[0]) => T(key)
+const togglePassword = () => {
+  showPassword.value = !showPassword.value
+}
+
+const goToWelcome = () => {
+  router.push('/')
+}
+
+const goBack = () => {
+  router.go(-1)
+}
+
+const handleLogin = async () => {
+  if (!form.value.emailOrUsername || !form.value.password) {
+    ElMessage.error(t('missingRequiredFields'))
+    return
+  }
+
+  try {
+    loading.value = true
+    await store.dispatch('user/login', form.value)
+    ElMessage.success(t('welcome'))
+    router.push('/dashboard')
+  } catch (error: any) {
+    console.error('Login error:', error)
+    const message = translateErrorMessage(error?.response?.data?.message || error?.message || 'Erreur de connexion')
+    ElMessage.error(message)
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleGoogleLogin = () => {
+  ElMessage.info(t('googleLoginNotImplemented'))
+}
+
+const handleAppleLogin = () => {
+  ElMessage.info(t('appleLoginNotImplemented'))
+}
+
+const handleForgotPassword = () => {
+  resetPasswordRef.value?.openResetDialog()
+}
+
+const handleSendOtp = async (method: 'email' | 'phone', value: string) => {
+  try {
+    loading.value = true
+    await store.dispatch('user/sendOtp', { method, value })
+    ElMessage.success(t('otpSent'))
+  } catch (error: any) {
+    console.error('Send OTP error:', error)
+    const message = translateErrorMessage(error?.response?.data?.message || error?.message || 'Erreur d\'envoi OTP')
+    ElMessage.error(message)
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleResetPassword = async (form: {
+  method: 'email' | 'phone'
+  email?: string
+  phoneNumber?: string
+  otpCode: string
+  newPassword: string
+}) => {
+  try {
+    loading.value = true
+    await store.dispatch('user/resetPassword', form)
+    ElMessage.success(t('passwordResetSuccess'))
+    handleCloseReset()
+  } catch (error: any) {
+    console.error('Reset password error:', error)
+    const message = translateErrorMessage(error?.response?.data?.message || error?.message || 'Erreur de réinitialisation')
+    ElMessage.error(message)
+  } finally {
+    loading.value = false
+  }
+}
+
+const handleCloseReset = () => {
+  // Fermer les dialogs de réinitialisation
+}
+
+const previousSlide = () => {
+  currentSlide.value = currentSlide.value > 0 ? currentSlide.value - 1 : 2
+}
+
+const nextSlide = () => {
+  currentSlide.value = currentSlide.value < 2 ? currentSlide.value + 1 : 0
+}
 
 // Fonction pour traduire les messages d'erreur de l'API
 const translateErrorMessage = (message: string) => {
   const lowerMessage = message.toLowerCase()
   
-  // Messages d'erreur courants
   if (lowerMessage.includes('bad credentials') || lowerMessage.includes('mauvais identifiants')) {
     return t('badCreds')
   }
@@ -246,604 +261,678 @@ const translateErrorMessage = (message: string) => {
   if (lowerMessage.includes('invalid password') || lowerMessage.includes('mot de passe invalide')) {
     return t('passwordIncorrect')
   }
-  if (lowerMessage.includes('email already exists') || lowerMessage.includes('email existe déjà')) {
-    return t('emailExists')
-  }
-  if (lowerMessage.includes('phone already exists') || lowerMessage.includes('téléphone existe déjà')) {
-    return t('phoneExists')
-  }
-  if (lowerMessage.includes('invalid otp') || lowerMessage.includes('otp invalide')) {
-    return t('otpIncorrect')
-  }
-  if (lowerMessage.includes('expired') || lowerMessage.includes('expiré')) {
-    return t('otpExpired')
-  }
-  if (lowerMessage.includes('wrong data provided')) {
-    return t('wrongDataProvided')
-  }
-  if (lowerMessage.includes('logtimestamp') || lowerMessage.includes('ne doit pas être nul')) {
-    return t('serverError')
-  }
-  if (lowerMessage.includes('nullpointerexception') || lowerMessage.includes('authenticationlog')) {
-    return t('serverError')
-  }
   
-  // Si aucun message spécifique n'est trouvé, retourner le message original
   return message
-}
-const rules = {
-  email: [
-    { required: true, message: computed(() => t('emailRequired')).value, trigger: 'blur' },
-    { type: 'email', message: computed(() => t('emailInvalid')).value, trigger: ['blur', 'change'] }
-  ],
-  password: [
-    { required: true, message: computed(() => t('passwordRequired')).value, trigger: 'blur' },
-    { min: 6, message: computed(() => t('passwordMin')).value, trigger: 'blur' }
-  ]
-}
-
-const onLangChange = () => {
-  setLang(lang.value)
 }
 
 onMounted(() => {
-  document.documentElement.setAttribute('lang', lang.value)
+  document.documentElement.setAttribute('lang', 'fr')
 })
-
-const logIn = async () => {
-  const form = formRef.value
-  if (!form) return
-  try {
-    loading.value = true
-    const valid = await form.validate()
-    if (!valid) { loading.value = false; return }
-    
-    // Validation des champs
-    if (!loginForm.value.email.trim()) {
-      ElMessage.error(t('emailRequired'))
-      return
-    }
-    if (!loginForm.value.password.trim()) {
-      ElMessage.error(t('passwordRequired'))
-      return
-    }
-    
-    const payload = {
-      email: loginForm.value.email.trim(),
-      password: loginForm.value.password
-    }
-    
-    // Debug: afficher les données de connexion
-    console.log('Login payload:', payload)
-    console.log('Email length:', payload.email.length)
-    console.log('Password length:', payload.password.length)
-    console.log('Email format valid:', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email))
-    
-    const ok = await store.dispatch('user/login', payload)
-    
-    // Debug: afficher le résultat de la connexion
-    console.log('Login result:', ok)
-    
-    if (ok) {
-      setLang(lang.value)
-      ElMessage.success(t('welcome'))
-      router.push({ path: '/' })
-    } else {
-      ElMessage.error(t('badCreds'))
-    }
-  } catch (e: any) {
-    console.error('Login error:', e)
-    console.error('Login error response:', e?.response)
-    console.error('Login error data:', e?.response?.data)
-    console.error('Login error status:', e?.response?.status)
-    
-    // Gestion des erreurs spécifiques
-    let errorMessage = e?.response?.data?.message || e?.message || t('error')
-    
-    // Gestion des erreurs 500 (problèmes serveur)
-    if (e?.response?.status === 500) {
-      errorMessage = t('serverError')
-    } else {
-      // Gestion des erreurs de validation (objets avec plusieurs champs)
-      if (e?.response?.data && typeof e.response.data === 'object') {
-        const errorData = e.response.data
-        // Chercher le premier message d'erreur dans l'objet
-        const firstError = Object.values(errorData).find(value => typeof value === 'string')
-        if (firstError) {
-          errorMessage = firstError as string
-        }
-      }
-    }
-    
-    console.error('Translated error message:', translateErrorMessage(errorMessage))
-    ElMessage.error(translateErrorMessage(errorMessage))
-  } finally {
-    loading.value = false
-  }
-}
-
-const showResetPassword = ref(false)
-const showResetMethodDialog = ref(false)
-const resetMethod = ref<'email' | 'phone'>('email')
-const resetPasswordForm = ref({
-  email: '',
-  phoneNumber: '',
-  otpCode: '',
-  newPassword: '',
-  confirmNewPassword: ''
-})
-
-const resetPasswordRules = {
-  email: [
-    { required: true, message: computed(() => t('emailRequired')).value, trigger: 'blur' },
-    { type: 'email', message: computed(() => t('emailInvalid')).value, trigger: ['blur', 'change'] }
-  ],
-  phoneNumber: [
-    { required: true, message: computed(() => t('phoneRequired')).value, trigger: 'blur' }
-  ],
-  otpCode: [
-    { required: true, message: computed(() => t('otpRequired')).value, trigger: 'blur' },
-    { min: 4, max: 6, message: computed(() => t('otpInvalid')).value, trigger: 'blur' }
-  ],
-  newPassword: [
-    { required: true, message: computed(() => t('passwordRequired')).value, trigger: 'blur' },
-    { min: 6, message: computed(() => t('passwordMin')).value, trigger: 'blur' }
-  ],
-  confirmNewPassword: [
-    { required: true, message: computed(() => t('confirmPasswordRequired')).value, trigger: 'blur' },
-    {
-      validator: (_: any, value: string, callback: Function) => {
-        if (value !== resetPasswordForm.value.newPassword) {
-          callback(new Error(t('passwordsNotMatch')))
-        } else {
-          callback()
-        }
-      },
-      trigger: ['blur', 'change']
-    }
-  ]
-}
-
-const forgotPassword = () => {
-  showResetMethodDialog.value = true
-}
-
-const selectResetMethod = (method: 'email' | 'phone') => {
-  resetMethod.value = method
-  showResetMethodDialog.value = false
-  showResetPassword.value = true
-}
-
-const sendOtp = async () => {
-  try {
-    loading.value = true
-    let response
-    
-    // Validation des champs avant envoi
-    if (resetMethod.value === 'email') {
-      if (!resetPasswordForm.value.email.trim()) {
-        ElMessage.error(t('emailRequired'))
-        return
-      }
-      response = await store.dispatch('user/sendOtpEmail', { email: resetPasswordForm.value.email.trim() })
-    } else {
-      if (!resetPasswordForm.value.phoneNumber.trim()) {
-        ElMessage.error(t('phoneRequired'))
-        return
-      }
-      response = await store.dispatch('user/sendOtpPhone', { phoneNumber: resetPasswordForm.value.phoneNumber.trim() })
-    }
-    
-    // Debug: afficher la réponse de l'API
-    console.log('Send OTP response:', response)
-    
-    // Gestion des réponses selon la méthode
-    if (resetMethod.value === 'email') {
-      if (response && !response.message && !response.error) {
-        ElMessage.success(t('otpSent'))
-      } else if (response?.message) {
-        ElMessage.warning(translateErrorMessage(response.message))
-      } else {
-        ElMessage.error(t('otpSendError'))
-      }
-    } else {
-      // Pour le téléphone, l'endpoint GET peut retourner différentes réponses
-      if (response && !response.error) {
-        ElMessage.success(t('otpSent'))
-      } else if (response?.message) {
-        ElMessage.warning(translateErrorMessage(response.message))
-      } else {
-        ElMessage.error(t('otpSendError'))
-      }
-    }
-  } catch (e: any) {
-    console.error('Send OTP error:', e)
-    const errorMessage = e?.response?.data?.message || e?.message || t('otpSendError')
-    
-    // Gestion spécifique pour les erreurs de téléphone
-    if (resetMethod.value === 'phone') {
-      if (e?.response?.status === 404) {
-        ElMessage.error(t('phoneNotFound'))
-      } else if (e?.response?.status === 400) {
-        ElMessage.error(translateErrorMessage(errorMessage))
-      } else {
-        ElMessage.error(translateErrorMessage(errorMessage))
-      }
-    } else {
-      ElMessage.error(translateErrorMessage(errorMessage))
-    }
-  } finally {
-    loading.value = false
-  }
-}
-
-const resetPassword = async () => {
-  const form = formRef.value
-  if (!form) return
-  try {
-    loading.value = true
-    const valid = await form.validate()
-    if (!valid) { loading.value = false; return }
-    
-    // D'abord vérifier le code OTP
-    const otpPayload = resetMethod.value === 'email' 
-      ? {
-          email: resetPasswordForm.value.email,
-          otpCode: resetPasswordForm.value.otpCode
-        }
-      : {
-          phoneNumber: resetPasswordForm.value.phoneNumber,
-          otpCode: resetPasswordForm.value.otpCode
-        }
-    
-    // Vérifier l'OTP selon la méthode
-    const otpResponse = resetMethod.value === 'email' 
-      ? await store.dispatch('user/verifyEmailOtp', otpPayload)
-      : await store.dispatch('user/verifyOtp', otpPayload)
-    
-    console.log('OTP verification response:', otpResponse)
-    console.log('OTP response has message:', !!otpResponse?.message)
-    console.log('OTP response has error:', !!otpResponse?.error)
-    
-    // Vérifier si l'OTP est valide (pas d'erreur et pas de message d'erreur)
-    if (otpResponse && !otpResponse.error && (!otpResponse.message || otpResponse.message.includes('successfully'))) {
-      // OTP valide, maintenant réinitialiser le mot de passe selon la méthode
-      const resetPayload = resetMethod.value === 'email' 
-        ? {
-            email: resetPasswordForm.value.email.trim(),
-            otpCode: resetPasswordForm.value.otpCode.trim(),
-            newPassword: resetPasswordForm.value.newPassword
-          }
-        : {
-            phoneNumber: resetPasswordForm.value.phoneNumber.trim(),
-            otpCode: resetPasswordForm.value.otpCode.trim(),
-            newPassword: resetPasswordForm.value.newPassword
-          }
-      
-      // Vérifier que toutes les valeurs requises sont présentes
-      if (resetMethod.value === 'email') {
-        if (!resetPayload.email || !resetPayload.otpCode || !resetPayload.newPassword) {
-          ElMessage.error(t('missingRequiredFields'))
-          return
-        }
-      } else {
-        if (!resetPayload.phoneNumber || !resetPayload.otpCode || !resetPayload.newPassword) {
-          ElMessage.error(t('missingRequiredFields'))
-          return
-        }
-      }
-      
-      console.log('OTP valid, proceeding with password reset. Payload:', resetPayload)
-      console.log('Reset method:', resetMethod.value)
-      console.log('Form values:', {
-        email: resetPasswordForm.value.email,
-        phoneNumber: resetPasswordForm.value.phoneNumber,
-        otpCode: resetPasswordForm.value.otpCode,
-        newPassword: resetPasswordForm.value.newPassword
-      })
-      
-      // Afficher un message indiquant que la réinitialisation est en cours
-      ElMessage.info(t('resettingPassword'))
-      
-      // Utiliser le bon endpoint selon la méthode
-      const response = resetMethod.value === 'email' 
-        ? await store.dispatch('user/resetPasswordByEmail', resetPayload)
-        : await store.dispatch('user/resetPassword', resetPayload)
-      
-      // Debug: afficher la réponse de l'API
-      console.log('Reset password response:', response)
-      
-      // Si la réponse existe et n'a pas de message d'erreur, c'est un succès
-      if (response && !response.message && !response.error) {
-        ElMessage.success(t('passwordResetSuccess'))
-        
-        // Sauvegarder l'email avant de vider le formulaire
-        const emailToFill = resetMethod.value === 'email' ? resetPasswordForm.value.email : ''
-        
-        showResetPassword.value = false
-        resetPasswordForm.value = { email: '', phoneNumber: '', otpCode: '', newPassword: '', confirmNewPassword: '' }
-        
-        // Redirection vers le formulaire de connexion après 2 secondes
-        setTimeout(() => {
-          showResetMethodDialog.value = false
-          // Pré-remplir l'email dans le formulaire de connexion
-          loginForm.value.email = emailToFill
-        }, 2000)
-      } else if (response?.message) {
-        ElMessage.warning(translateErrorMessage(response.message))
-      } else {
-        ElMessage.error(t('passwordResetError'))
-      }
-            } else if (otpResponse?.message) {
-          // Gestion spécifique pour l'expiration OTP
-          if (otpResponse.message.includes('expired') || otpResponse.isValid === false) {
-            ElMessage.error(t('otpExpired'))
-            // Vider le champ OTP pour permettre un nouveau code
-            resetPasswordForm.value.otpCode = ''
-            // Afficher un message pour inviter à renvoyer le code
-            ElMessage.info(t('requestNewOtp'))
-          } else {
-            ElMessage.error(translateErrorMessage(otpResponse.message))
-          }
-    } else {
-      ElMessage.error(t('otpIncorrect'))
-    }
-  } catch (e: any) {
-    const errorMessage = e?.response?.data?.message || e?.message || t('passwordResetError')
-    ElMessage.error(translateErrorMessage(errorMessage))
-  } finally {
-    loading.value = false
-  }
-}
-
-const toggleTheme = () => {
-  const theme = isDark.value ? 'dark' : 'light'
-  localStorage.setItem('theme', theme)
-  document.documentElement.setAttribute('data-theme', theme)
-}
-
-const signInWithGoogle = () => {
-  ElMessage.info(t('googleSignInComing'))
-}
-
-const signInWithApple = () => {
-  ElMessage.info(t('appleSignInComing'))
-}
-
-const registerForm = ref({
-  firstName: '',
-  lastName: '',
-  email: '',
-  phoneNumber: '',
-  password: '',
-  confirmPassword: '',
-  age: undefined as number | undefined
-})
-
-const rulesRegister = {
-  firstName: [
-    { required: true, message: computed(() => t('firstNameRequired')).value, trigger: 'blur' }
-  ],
-  lastName: [
-    { required: true, message: computed(() => t('lastNameRequired')).value, trigger: 'blur' }
-  ],
-  email: [
-    { required: true, message: computed(() => t('emailRequired')).value, trigger: 'blur' },
-    { type: 'email', message: computed(() => t('emailInvalid')).value, trigger: ['blur', 'change'] }
-  ],
-  phoneNumber: [
-    { required: true, message: computed(() => t('phoneRequired')).value, trigger: 'blur' }
-  ],
-  password: [
-    { required: true, message: computed(() => t('passwordRequired')).value, trigger: 'blur' },
-    { min: 6, message: computed(() => t('passwordMin')).value, trigger: 'blur' }
-  ],
-  confirmPassword: [
-    { required: true, message: computed(() => t('confirmPasswordRequired')).value, trigger: 'blur' },
-    {
-      validator: (_: any, value: string, callback: Function) => {
-        if (value !== registerForm.value.password) {
-          callback(new Error(t('passwordsNotMatch')))
-        } else {
-          callback()
-        }
-      },
-      trigger: ['blur', 'change']
-    }
-  ],
-  age: [
-    { required: true, message: computed(() => t('ageRequired')).value, trigger: 'blur' },
-    {
-      validator: (_: any, value: number, callback: Function) => {
-        if (!Number.isFinite(value) || value <= 0) return callback(new Error(t('ageInvalid')))
-        callback()
-      },
-      trigger: ['blur', 'change']
-    }
-  ]
-}
-
-const register = async () => {
-  const form = formRefRegister.value
-  if (!form) return
-  try {
-    loading.value = true
-    const valid = await form.validate()
-    if (!valid) { loading.value = false; return }
-    const ok = await store.dispatch('user/register', {
-      firstName: registerForm.value.firstName,
-      lastName: registerForm.value.lastName,
-      email: registerForm.value.email,
-      phoneNumber: registerForm.value.phoneNumber,
-      password: registerForm.value.password,
-      age: registerForm.value.age
-    })
-    if (ok) {
-      setLang(lang.value)
-      ElMessage.success(t('welcome'))
-      router.push({ path: '/' })
-    }
-  } catch (e: any) {
-    console.error('Register error:', e)
-    // Gestion des erreurs spécifiques pour l'enregistrement
-    const errorMessage = e?.response?.data?.message || e?.message || t('error')
-    ElMessage.error(translateErrorMessage(errorMessage))
-  } finally {
-    loading.value = false
-  }
-}
 </script>
 
-<style lang="scss">
-.container {
-  display: flex;
-  justify-content: center;
+<style scoped>
+
+.login {
   align-items: center;
+  background-color: var(--bg-color);
+  display: flex;
   height: 100vh;
-  background: var(--bg-color);
-}
-.login-form {
-  width: 25rem;
-}
-.login-card {
-  min-height: 22rem;
-  border-radius: 30px;
-  padding: 0 10%;
-  background-color: var(--card-bg);
-}
-.social-buttons { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-.social-btn { width: 100%; height: 44px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #e5e7eb; background: #fff; cursor: pointer; }
-.social-btn .social-text { font-weight: 600; color: #1f2937; }
-.google-btn { background: #fff; }
-.google-btn:hover { background: #f8fafc; }
-.apple-btn { background: #111827; border-color: #111827; }
-.apple-btn:hover { background: #0b1220; }
-.apple-btn .social-text { color: #fff; }
-.logo-wrapper {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-.vue-logo {
-  display: inline-block;
-  margin-bottom: 0.5rem;
-}
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: relative;
   width: 100%;
-  padding-top: 12px;
-  margin-top: 8px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  overflow: hidden;
 }
-.actions-row { justify-content: space-between; }
-.language-row { justify-content: flex-end; border-top: none; padding-top: 6px; margin-top: 4px; }
-.left-actions {
-  display: flex;
-  gap: 12px;
-}
-.left-actions .divider { color: rgba(0,0,0,0.25); }
-.appActionLink {
-  color: var(--label-color);
-  text-decoration: none;
-  font-size: 12px;
-}
-.appActionLink:hover { text-decoration: underline; }
-.forgot-link { color: $primary-color; font-weight: 600; }
-.forgot-link:hover { text-decoration: underline; }
-.muted { color: rgba(0,0,0,0.55); font-size: 12px; margin-right: 6px; }
-.register-link { color: $primary-color; font-weight: 600; cursor: pointer; font-size: 12px; }
-.register-link:hover { text-decoration: underline; }
-.forgot-inline { display: flex; justify-content: flex-end; margin-top: -6px; margin-bottom: 16px; }
-.reset-method-selector { text-align: center; }
-.reset-method-group { width: 100%; }
-.reset-method-group .el-radio-button { width: 50%; }
-.otp-btn {
-  background-color: #67c23a !important;
-  border-color: #67c23a !important;
-  color: #fff !important;
-  height: 40px;
-  border-radius: 6px;
-  font-weight: 500;
-}
-.otp-btn:hover,
-.otp-btn:focus,
-.otp-btn:active,
-.otp-btn.is-active,
-.otp-btn.is-hover {
-  background-color: #85ce61 !important;
-  border-color: #85ce61 !important;
-  color: #fff !important;
-}
-.reset-method-dialog {
-  text-align: center;
-  padding: 20px 0;
-}
-.reset-method-text {
-  margin-bottom: 30px;
-  font-size: 16px;
-  color: var(--text-color);
-}
-.reset-method-buttons {
+
+.login .section {
+  align-items: center;
+  align-self: stretch;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  justify-content: space-between;
+  position: relative;
+  width: 640px;
+  background: var(--card-bg);
 }
-.reset-method-btn {
-  height: 50px;
-  font-size: 16px;
-  border-radius: 8px;
+
+.login .header-navigation {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  height: 96px;
+  padding: 32px;
+  position: relative;
+  width: 100%;
 }
-.reset-method-btn i {
-  margin-right: 10px;
+
+@media (max-width: 768px) {
+  .login .header-navigation {
+    height: 60px;
+    padding: 16px 20px;
+  }
 }
-.email-btn {
-  background-color: #409eff !important;
-  border-color: #409eff !important;
+
+/* Bouton de retour mobile */
+.login .mobile-back-button {
+  display: none;
+  position: absolute;
+  top: 12px;
+  left: 20px;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  padding: 8px;
 }
-.email-btn:hover {
-  background-color: #66b1ff !important;
-  border-color: #66b1ff !important;
+
+.login .mobile-back-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
 }
-.phone-btn {
-  background-color: #67c23a !important;
-  border-color: #67c23a !important;
+
+.login .mobile-back-button svg {
+  width: 24px;
+  height: 24px;
+  color: var(--text-color);
 }
-.phone-btn:hover {
-  background-color: #85ce61 !important;
-  border-color: #85ce61 !important;
+
+.login .logo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.dialog-footer {
+
+.login .logo-instance {
+  width: 141.15px;
+}
+
+.login .container {
+  align-items: center;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  padding: 0px 32px;
+  position: relative;
+  width: 100%;
+  flex: 1;
+  justify-content: center;
+}
+
+.login .content {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  width: 360px;
+}
+
+@media (max-width: 768px) {
+  .login .content {
+    gap: 20px;
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+.login .frame {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .login .frame {
+    gap: 20px;
+  }
+}
+
+.login .div {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .login .div {
+    gap: 6px;
+  }
+}
+
+.login .text-wrapper {
+  align-self: stretch;
+  color: #0a4a6f;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: -1px;
+  position: relative;
+}
+
+.login .p {
+  align-self: stretch;
+  color: #3f3f46;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+}
+
+.login .div-2 {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+}
+
+.login .text {
+  align-self: stretch;
+  color: #0a4a6f;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: -1px;
+  position: relative;
+}
+
+.login .input-form {
+  align-items: center;
+  align-self: stretch;
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+  padding: 12px;
+  position: relative;
+  width: 100%;
+}
+
+.login .text-2 {
+  color: #6b7280;
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: -1px;
+  position: relative;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.login .text-2::placeholder {
+  color: #6b7280;
+}
+
+.login .password {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  width: 100%;
+}
+
+.login .icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login .icon-instance-node {
+  height: 24px;
+  position: relative;
+  width: 24px;
+  color: #6b7280;
+}
+
+.login .text-wrapper-2 {
+  align-self: stretch;
+  color: #3f3f46;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
   text-align: right;
+  cursor: pointer;
 }
-.lang-select .el-input__inner {
-  text-align: center;
+
+.login .text-wrapper-2:hover {
+  color: #0a4a6f;
 }
-.title {
-  margin: 0;
-}
-.connextion-title {
-  color: var(--label-color) !important;
-  font-weight: bold;
-}
-.el-form-item__label {
-  color: var(--label-color) !important;
-}
-.main-login-btn {
-  background-color: #1A5276 !important;
-  border-color: #1A5276 !important;
-  color: #fff !important;
-  height: 44px;
+
+.login .button {
+  all: unset;
+  align-items: center;
+  align-self: stretch;
+  background-color: #0a4a6f;
+  border: 1px solid #0a4a6f;
   border-radius: 8px;
-  font-weight: 600;
+  box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+  justify-content: center;
+  overflow: hidden;
+  padding: 12px 24px;
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
-.main-login-btn:hover,
-.main-login-btn:focus,
-.main-login-btn:active,
-.main-login-btn.is-active,
-.main-login-btn.is-hover {
-  background-color: #1A5276 !important;
-  border-color: #1A5276 !important;
-  color: #fff !important;
+
+.login .button:hover {
+  background-color: #083d5c;
+  transform: translateY(-1px);
+}
+
+.login .button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login .button-2 {
+  all: unset;
+  box-sizing: border-box;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: -1px;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.login .divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  position: relative;
+  width: 100%;
+  margin: 16px 0;
+}
+
+.login .button-group {
+  align-items: flex-start;
+  align-self: stretch;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  width: 100%;
+}
+
+.login .button-social {
+  align-self: stretch;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.login .button-social:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+}
+
+.login .google-btn {
+  background-color: #ffffff;
+}
+
+.login .apple-btn {
+  background-color: #1f2937;
+  color: #ffffff;
+  border-color: #1f2937;
+}
+
+.login .apple-btn:hover {
+  background-color: #111827;
+}
+
+.login .social-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.login .don-t-have-an {
+  color: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.20px;
+  line-height: 20px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.login .span {
+  color: #3f3f46;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.login .text-wrapper-3 {
+  color: #0a4a6f;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login .text-wrapper-3:hover {
+  color: #083d5c;
+}
+
+.login .footer {
+  align-items: flex-end;
+  align-self: stretch;
+  background-color: transparent;
+  display: flex;
+  height: 96px;
+  padding: 32px;
+  position: relative;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .login .footer {
+    height: 60px;
+    padding: 16px 20px;
+  }
+}
+
+.login .text-3 {
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.login .section-2 {
+  align-self: stretch;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  ),
+  url('/images/img1.jpg') center/cover;
+  border-radius: 80px 0px 0px 80px;
+  flex: 1;
+  flex-grow: 1;
+  position: relative;
+  order: 2;
+}
+
+.login .navigation-buttons {
+  position: absolute;
+  bottom: 56px;
+  right: 56px;
+  display: flex;
+  gap: 16px;
+  z-index: 10;
+}
+
+.login .nav-arrow {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.login .nav-arrow:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+.login .nav-arrow svg {
+  width: 24px;
+  height: 24px;
+}
+
+.login .quote {
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  left: 56px;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  position: absolute;
+  top: 359px;
+  width: 688px;
+}
+
+.login .name-and-text {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  left: 56px;
+  position: absolute;
+  top: 141px;
+  width: 688px;
+}
+
+.login .name {
+  align-self: stretch;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  margin-top: -1px;
+  position: relative;
+}
+
+
+
+/* Responsive pour mobile et tablette */
+@media (max-width: 1024px) {
+  .login {
+    flex-direction: column;
+  }
+  
+  .login .section {
+    width: 100%;
+    min-height: 75vh;
+    padding: 24px 20px;
+    order: 2;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Permettre le scroll sur les très petits écrans */
+  @media (max-width: 480px) {
+    .login .section {
+      min-height: auto;
+      height: auto;
+      overflow-y: auto;
+    }
+  }
+  
+  .login .section-2 {
+    display: none;
+  }
+  
+  /* Afficher le bouton de retour en mode mobile */
+  .login .mobile-back-button {
+    display: flex;
+  }
+  
+  .login .content {
+    align-items: flex-start;
+    text-align: left;
+    gap: 24px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .login .p {
+    text-align: left;
+  }
+  
+  .login .name-and-text {
+    display: none;
+  }
+  
+  .login .navigation-buttons {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    gap: 12px;
+  }
+
+  .login .nav-arrow {
+    width: 40px;
+    height: 40px;
+  }
+
+  .login .nav-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .login .quote {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .login .content {
+    width: 100%;
+    max-width: 320px;
+  }
+  
+  .login .header-navigation {
+    padding: 16px 20px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .login .container {
+    padding: 0 20px;
+    justify-content: flex-start;
+    gap: 20px;
+  }
+  
+  .login .footer {
+    padding: 16px 20px;
+    height: auto;
+    margin-top: 20px;
+  }
+  
+  .login .section-2 {
+    padding: 20px;
+  }
+  
+  .login .name {
+    font-size: 28px;
+  }
+  
+  .login .quote {
+    font-size: 20px;
+  }
+  
+  .login .logo-instance {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .login .content {
+    gap: 16px;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .login .div {
+    gap: 12px;
+    width: 100%;
+  }
+  
+  .login .frame {
+    gap: 16px;
+  }
+  
+  .login .text-wrapper {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  
+  .login .p {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  
+  .login .header-navigation {
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+  
+  .login .container {
+    padding: 0 16px;
+    gap: 16px;
+  }
+  
+  .login .footer {
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
 }
 </style>

@@ -1,6 +1,7 @@
 import { Module } from 'vuex'
 import api from '@/utils/axiosReq'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { handleNetworkError, retryRequest, optimizeForMobile } from '@/utils/networkUtils'
 
 type UserState = { token: string | null; userInfo: any | null; roles: string[] }
 
@@ -26,13 +27,26 @@ const user: Module<UserState, any> = {
     userRoles: (state) => state.roles || []
   },
   actions: {
-        async login({ commit }, payload) {
+    async login({ commit }, payload) {
       // payload peut être { email, password } ou { phoneNumber, password }
       try {
         console.log('Login API call with payload:', payload)
-        console.log('Login API URL:', 'https://api.santelink.dev.rancher.nebulageekinfra.com/api/v1/auth/authenticate')
-        const data: any = await api.post('/api/v1/auth/authenticate', payload)
+        
+        // Utiliser retryRequest pour les tentatives automatiques
+        const data: any = await retryRequest(async () => {
+          const config = optimizeForMobile({
+            timeout: 30000,
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }
+          });
+          
+          return await api.post('/api/v1/auth/authenticate', payload, config);
+        }, 2, 1000);
+        
         console.log('Login API response:', data)
+        
         // L'API retourne { accessToken, refreshToken, expiresIn }
         if (data.accessToken) {
           commit('SET_TOKEN', data.accessToken)
@@ -65,10 +79,7 @@ const user: Module<UserState, any> = {
         return false
       } catch (error) {
         console.error('Login API error:', error)
-        console.error('Login API error response:', error?.response)
-        console.error('Login API error data:', error?.response?.data)
-        console.error('Login API error status:', error?.response?.status)
-        console.error('Login API error message:', error?.message)
+        handleNetworkError(error, 'Login')
         throw error
       }
     },
@@ -77,7 +88,7 @@ const user: Module<UserState, any> = {
       // Si l'API renvoie déjà un token
       if (data?.accessToken) {
         commit('SET_TOKEN', data.accessToken)
-        return true
+      return true
       }
       // Sinon, on authentifie avec l'email et le mot de passe fournis
       if (payload?.email && payload?.password) {
