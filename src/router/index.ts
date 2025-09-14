@@ -62,37 +62,37 @@ const router = createRouter({
   routes
 })
 
-// Navigation guard temporairement désactivé pour tester
-// router.beforeEach((to, from, next) => {
-//   console.log('Navigation guard - to:', to.path, 'from:', from.path, 'meta:', to.meta)
-//   
-//   // Temporairement désactiver la vérification d'authentification pour les routes publiques
-//   if (to.meta.public) {
-//     console.log('Public route - allowing access')
-//     next()
-//     return
-//   }
-//   
-//   const isAuthenticated = !!getToken()
-//   console.log('Is authenticated:', isAuthenticated)
-//   
-//   // Si la route nécessite une authentification
-//   if (to.meta.requiresAuth && !isAuthenticated) {
-//     console.log('Redirecting to login - requires auth')
-//     next('/login')
-//     return
-//   }
-//   
-//   // Si l'utilisateur est connecté et essaie d'accéder à login, rediriger vers dashboard
-//   if (to.path === '/login' && isAuthenticated) {
-//     console.log('Redirecting to dashboard - already authenticated')
-//     next('/dashboard')
-//     return
-//   }
-//   
-//   console.log('Allowing navigation to:', to.path)
-//   next()
-// })
+// Navigation guard pour gérer l'authentification
+router.beforeEach((to, from, next) => {
+  console.log('Navigation guard - to:', to.path, 'from:', from.path, 'meta:', to.meta)
+  
+  // Permettre l'accès aux routes publiques
+  if (to.meta.public) {
+    console.log('Public route - allowing access')
+    next()
+    return
+  }
+  
+  const isAuthenticated = !!getToken()
+  console.log('Is authenticated:', isAuthenticated)
+  
+  // Si la route nécessite une authentification
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    console.log('Redirecting to login - requires auth')
+    next('/login')
+    return
+  }
+  
+  // Si l'utilisateur est connecté et essaie d'accéder à login, rediriger vers dashboard
+  if (to.path === '/login' && isAuthenticated) {
+    console.log('Redirecting to dashboard - already authenticated')
+    next('/dashboard')
+    return
+  }
+  
+  console.log('Allowing navigation to:', to.path)
+  next()
+})
 
 export default router
 

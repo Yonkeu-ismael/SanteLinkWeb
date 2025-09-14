@@ -434,7 +434,7 @@ const goBack = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 32px;
+  gap: 18px;
   position: relative;
   width: 360px;
 }
@@ -445,7 +445,7 @@ const goBack = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 32px;
+  gap: 18px;
   position: relative;
   width: 100%;
 }
@@ -456,7 +456,7 @@ const goBack = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   position: relative;
   width: 100%;
 }
@@ -488,7 +488,7 @@ const goBack = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 16px;
+  gap: 10px;
   position: relative;
   width: 100%;
 }
@@ -507,29 +507,32 @@ const goBack = () => {
 .register-complete .input-form {
   align-items: center;
   align-self: stretch;
-  background-color: var(--card-bg);
-  border: 1px solid #d1d5db;
+  background-color: #fff;
+  border: 1px solid #d2d6db;
   border-radius: 12px;
   display: flex;
   flex: 0 0 auto;
   gap: 12px;
-  padding: 12px;
+  padding: 6px 12px;
   position: relative;
   width: 100%;
+  color: #71717a;
+  min-height: 32px;
 }
 
 .register-complete .text-2 {
-  color: var(--text-color);
+  color: #71717a;
   flex: 1;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Manrope', sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
-  margin-top: -1px;
+  letter-spacing: 0.2px;
   position: relative;
   border: none;
   outline: none;
   background: transparent;
+  padding: 0;
 }
 
 .register-complete .text-2::placeholder {
@@ -543,7 +546,7 @@ const goBack = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   position: relative;
   width: 100%;
 }
@@ -572,6 +575,7 @@ const goBack = () => {
   justify-content: space-between;
   position: relative;
   width: 100%;
+  margin-top: 2px;
 }
 
 .register-complete .text-3 {
@@ -630,30 +634,33 @@ const goBack = () => {
   display: flex;
   flex: 0 0 auto;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   position: relative;
   width: 100%;
+  color: #d4d4d8;
+  margin-top: 4px;
 }
 
 .register-complete .button {
   all: unset;
   align-items: center;
   align-self: stretch;
-  background-color: #409eff;
-  border: 1px solid #409eff;
+  background-color: #f3f4f6;
+  border: 1px solid #f3f4f6;
   border-radius: 8px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
   box-sizing: border-box;
   display: flex;
   flex: 0 0 auto;
   gap: 12px;
   justify-content: center;
   overflow: hidden;
-  padding: 12px 24px;
+  padding: 8px 24px;
   position: relative;
   width: 100%;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-height: 40px;
 }
 
 .register-complete .button:hover:not(:disabled) {

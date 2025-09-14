@@ -48,86 +48,91 @@
               <div class="input-field">
                 <div class="text-wrapper">{{ t('phoneNumber') }}</div>
 
-                                 <div class="input-form">
-                                       <div class="country-code" @click="toggleCountryDropdown">
-                      <div class="flag">
-                        <div class="flag-placeholder">
-                          <span class="flag-emoji">{{ getFlagEmoji(selectedCountry.code) }}</span>
-                        </div>
-                      </div>
-
-                      <div class="text-wrapper-2">+{{ selectedCountry.dialCode }}</div>
-
-                      <div class="left-actionable">
-                        <svg class="vector" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                <div class="input-form">
+                  <div class="country-code" @click="toggleCountryDropdown">
+                    <div class="flag">
+                      <div class="flag-placeholder">
+                        <span class="flag-emoji">{{ getFlagEmoji(selectedCountry.code) }}</span>
                       </div>
                     </div>
 
-                   <!-- Dropdown des pays -->
-                   <div v-if="showCountryDropdown" class="country-dropdown">
-                     <div class="search-container">
-                       <input
-                         v-model="countrySearch"
-                         type="text"
-                         class="search-input"
-                         placeholder="Rechercher un pays..."
-                         @input="filterCountries"
-                       />
-                     </div>
-                     <div class="countries-list">
-                                               <div
-                          v-for="country in filteredCountries"
-                          :key="country.code"
-                          class="country-option"
-                          @click="selectCountry(country)"
-                        >
-                          <span class="country-flag-emoji">{{ getFlagEmoji(country.code) }}</span>
-                          <span class="country-name">{{ country.name }}</span>
-                          <span class="country-dial">+{{ country.dialCode }}</span>
-                        </div>
-                     </div>
-                   </div>
+                    <div class="text-wrapper-2">+{{ selectedCountry.dialCode }}</div>
 
-                   <input 
-                     v-model="formattedPhoneNumber"
-                     type="tel"
-                     class="phone-input"
-                     :placeholder="selectedCountry.placeholder"
-                     @keyup.enter="handleContinue"
-                     @input="formatPhoneNumber"
-                   />
-                 </div>
+                    <div class="left-actionable">
+                      <svg class="vector" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+
+                  <!-- Dropdown des pays -->
+                  <div v-if="showCountryDropdown" class="country-dropdown">
+                    <div class="search-container">
+                      <input
+                        v-model="countrySearch"
+                        type="text"
+                        class="search-input"
+                        placeholder="Rechercher un pays..."
+                        @input="filterCountries"
+                      />
+                    </div>
+                    <div class="countries-list">
+                      <div
+                        v-for="country in filteredCountries"
+                        :key="country.code"
+                        class="country-option"
+                        @click="selectCountry(country)"
+                      >
+                        <span class="country-flag-emoji">{{ getFlagEmoji(country.code) }}</span>
+                        <span class="country-name">{{ country.name }}</span>
+                        <span class="country-dial">+{{ country.dialCode }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <input 
+                    v-model="formattedPhoneNumber"
+                    type="tel"
+                    class="phone-input"
+                    :placeholder="selectedCountry.placeholder"
+                    @keyup.enter="handleContinue"
+                    @input="formatPhoneNumber"
+                  />
               </div>
             </div>
+            <button class="button" @click="handleContinue" :disabled="!phoneNumber.trim() || isSending">
+              <button class="button-2">
+                <span v-if="isSending">Envoi en cours...</span>
+                <span v-else>{{ t('continue') }}</span>
+              </button>
+            </button>
 
+              <p class="already-have-an">
+                <span class="span">{{ t('alreadyHaveAccount') }} </span>
+                <span class="text-wrapper-3" @click="goToLogin">{{ t('signIn') }}</span>
+              </p>
 
+          <p class="by-signing-up-or">
+              <span class="text-wrapper-4">
+                {{ t('bySigningUpText') }} <br />
+              </span>
 
-          </div>
+              <span class="text-wrapper-5">{{ t('termsOfService') }}</span>
+
+              <span class="text-wrapper-4"> {{ t('and') }} </span>
+
+              <span class="text-wrapper-5">{{ t('privacyPolicy') }}</span>
+            </p>
+
+        </div>
+
+      </div>
 
         </div>
       </div>
 
-      <footer class="">
-        <button class="button" @click="handleContinue" :disabled="!phoneNumber.trim() || isSending">
-          <button class="button-2">
-            <span v-if="isSending">Envoi en cours...</span>
-            <span v-else>{{ t('continue') }}</span>
-          </button>
-        </button>
-
-        <p class="by-signing-up-or">
-            <span class="text-wrapper-4">
-              {{ t('bySigningUpText') }} <br />
-            </span>
-
-            <span class="text-wrapper-5">{{ t('termsOfService') }}</span>
-
-            <span class="text-wrapper-4"> {{ t('and') }} </span>
-
-            <span class="text-wrapper-5">{{ t('privacyPolicy') }}</span>
-          </p>
+      <footer class="footer">
+        <div class="text-3">© SanteLink 2025</div>
       </footer>
     </div>
 
@@ -1304,7 +1309,7 @@ const nextSlide = () => {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 834px) {
   .sign-up {
     flex-direction: column;
     height: auto;
@@ -1333,21 +1338,34 @@ const nextSlide = () => {
   .sign-up .content {
     width: 100%;
     max-width: 400px;
+    margin-top: -620px;
   }
   
   .sign-up .header-navigation {
-    height: 2px;
-    padding: 10px;
+    height: 80px;
+    padding: 20px;
   }
   
   .sign-up .container {
     padding: 0 20px;
   }
   
-
-  /* .sign-up .footer {
+  .sign-up .footer {
     display: none;
-  } */
+  }
+  
+  .sign-up .by-signing-up-or {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--card-bg);
+    padding: 16px 32px;
+    z-index: 1000;
+    text-align: center;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 0;
+  }
   
   .sign-up .div {
     gap: 40px;
@@ -1379,6 +1397,10 @@ const nextSlide = () => {
   .sign-up .button-2 {
     font-size: 13px;
   }
+  .sign-up .footer {
+    display: none;
+  }
+  
 }
 
 /* Styles pour les notifications */
@@ -1455,5 +1477,39 @@ const nextSlide = () => {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
+}
+
+/* Styles pour le bloc "already-have-an" */
+.sign-up .already-have-an {
+  align-self: stretch;
+  color: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  position: relative;
+  text-align: center;
+  margin-top: 16px;
+}
+
+.sign-up .span {
+  color: #3f3f46;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.sign-up .text-wrapper-3 {
+  color: #0a4a6f;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.sign-up .text-wrapper-3:hover {
+  text-decoration: underline;
 }
 </style>

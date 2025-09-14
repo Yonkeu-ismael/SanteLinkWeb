@@ -145,6 +145,21 @@ import { googleAuthService } from '@/services/googleAuthService'
 
 const t = (key: Parameters<typeof T>[0]) => T(key)
 
+// Fonction pour valider si une chaîne est une adresse e-mail
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/
+  return emailRegex.test(email)
+}
+
+// Fonction pour valider si une chaîne est un numéro de téléphone (exemple simplifié)
+const isValidPhoneNumber = (phoneNumber: string): boolean => {
+  // Ici, vous pouvez ajouter une logique de validation plus robuste pour les numéros de téléphone
+  // Par exemple, en utilisant une bibliothèque de validation de numéro de téléphone
+  // Pour l'instant, on suppose qu'un numéro de téléphone est composé de chiffres et a une certaine longueur
+  const phoneRegex = /^\d{7,15}$/ // Exemple: 7 à 15 chiffres
+  return phoneRegex.test(phoneNumber)
+}
+
 const store = useStore()
 const router = useRouter()
 const loading = ref(false)
@@ -177,7 +192,18 @@ const handleLogin = async () => {
 
   try {
     loading.value = true
-    await store.dispatch('user/login', form.value)
+    let loginPayload: any = {}
+
+    if (isValidEmail(form.value.emailOrUsername)) {
+      loginPayload = { email: form.value.emailOrUsername, password: form.value.password }
+    } else if (isValidPhoneNumber(form.value.emailOrUsername)) {
+      loginPayload = { phoneNumber: form.value.emailOrUsername, password: form.value.password }
+    } else {
+      // Si ce n'est ni un email ni un numéro de téléphone, traiter comme un nom d'utilisateur
+      loginPayload = { username: form.value.emailOrUsername, password: form.value.password }
+    }
+    
+    await store.dispatch('user/login', loginPayload)
     ElMessage.success(t('welcome'))
     router.push('/dashboard')
   } catch (error: any) {
