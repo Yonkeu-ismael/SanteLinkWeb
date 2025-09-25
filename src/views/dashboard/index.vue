@@ -18,7 +18,7 @@
                 <div :class="$style.text">Home</div>
               </div>
             </div>
-            <div :class="$style.homeNavItemBase">
+            <div :class="$style.homeNavItemBase" @click="navigateToAppointment">
               <div :class="$style.homeContent">
                 <div :class="$style.calendar">
                   <img src="/icons/Dashbord-ico/calendar.svg" alt="Appointment" />
@@ -226,7 +226,7 @@
           </div>
           <b :class="$style.active">Home</b>
         </div>
-        <div :class="$style.menuNavigationMasterMenuNavigation">
+        <div :class="$style.menuNavigationMasterMenuNavigation" @click="navigateToAppointment">
           <div :class="$style.icon">
             <img src="/icons/Dashbord-ico/calendar.svg" alt="Appointments" />
           </div>
@@ -266,6 +266,10 @@ const userName = computed(() => store.getters['user/userName'] || 'Utilisateur')
 // Méthodes de navigation
 const navigateToSettings = () => {
   router.push('/settings')
+}
+
+const navigateToAppointment = () => {
+  router.push('/appointment')
 }
 </script>
 

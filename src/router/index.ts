@@ -56,6 +56,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { requiresAuth: true }
   },
   { 
+    path: '/appointment', 
+    name: 'Appointment', 
+    component: () => import('@/views/appointment/Appointment.vue'),
+    meta: { requiresAuth: true }
+  },
+  { 
     path: '/settings', 
     name: 'Settings', 
     component: () => import('@/views/settings/Settings.vue'),

@@ -18,7 +18,7 @@
                 <div :class="$style.text">Home</div>
               </div>
             </div>
-            <div :class="$style.navItemBase">
+            <div :class="$style.navItemBase" @click="navigateToAppointment">
               <div :class="$style.settingsContent">
                 <div :class="$style.home">
                   <img src="/calendar.svg" alt="Appointment" />
@@ -219,7 +219,7 @@
           </div>
           <div :class="$style.inactive">Home</div>
         </div>
-        <div :class="$style.menuNavigationMasterMenuNavigation">
+        <div :class="$style.menuNavigationMasterMenuNavigation" @click="navigateToAppointment">
           <div :class="$style.icon">
             <img src="/icons/Dashbord-ico/calendar.svg" alt="Appointments" />
           </div>
@@ -256,7 +256,7 @@ const router = useRouter()
 // Getters pour les informations utilisateur
 const userName = computed(() => store.getters['user/userName'] || 'Utilisateur')
 const userEmail = computed(() => store.getters['user/userEmail'] || '')
-const userProfileImage = computed(() => store.getters['user/profileImage'] || '/images/img1.jpg')
+const userProfileImage = computed(() => store.getters['user/profileImage'] || '/images/image.png')
 const shareLocation = computed(() => store.getters['user/shareLocation'])
 
 // Charger les informations utilisateur au montage du composant
@@ -305,6 +305,10 @@ const navigateToAbout = () => {
 
 const navigateToDashboard = () => {
   router.push('/dashboard')
+}
+
+const navigateToAppointment = () => {
+  router.push('/appointment')
 }
 
 const navigateToSettings = () => {
