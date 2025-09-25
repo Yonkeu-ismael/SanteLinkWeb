@@ -1,17 +1,48 @@
 import { Module } from 'vuex'
 import api from '@/utils/axiosReq'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getUserInfo, setUserInfo, removeUserInfo } from '@/utils/auth'
 import { handleNetworkError, retryRequest, optimizeForMobile } from '@/utils/networkUtils'
 
-type UserState = { token: string | null; userInfo: any | null; roles: string[] }
+type UserState = { 
+  token: string | null; 
+  userInfo: any | null; 
+  roles: string[];
+  settings: {
+    shareLocation: boolean;
+    notifications: boolean;
+    darkMode: boolean;
+  };
+}
 
 const user: Module<UserState, any> = {
   namespaced: true,
-  state: () => ({ token: getToken(), userInfo: null, roles: [] }),
+  state: () => ({ 
+    token: getToken(), 
+    userInfo: getUserInfo(), 
+    roles: getUserInfo()?.roles || [],
+    settings: {
+      shareLocation: false,
+      notifications: true,
+      darkMode: false
+    }
+  }),
   mutations: {
     SET_TOKEN(s, t: string) { s.token = t; setToken(t) },
     CLEAR_TOKEN(s) { s.token = null; removeToken() },
-    SET_USER_INFO(s, u) { s.userInfo = u; s.roles = u?.roles || [] }
+    SET_USER_INFO(s, u) { 
+      s.userInfo = u; 
+      s.roles = u?.roles || [];
+      setUserInfo(u);
+    },
+    CLEAR_USER_INFO(s) { 
+      s.userInfo = null; 
+      s.roles = [];
+      removeUserInfo();
+    },
+    SET_SETTINGS(s, settings) { s.settings = { ...s.settings, ...settings } },
+    TOGGLE_SHARE_LOCATION(s) { s.settings.shareLocation = !s.settings.shareLocation },
+    TOGGLE_NOTIFICATIONS(s) { s.settings.notifications = !s.settings.notifications },
+    TOGGLE_DARK_MODE(s) { s.settings.darkMode = !s.settings.darkMode }
   },
   getters: {
     isAuthenticated: (state) => !!state.token,
@@ -24,7 +55,12 @@ const user: Module<UserState, any> = {
     },
     userEmail: (state) => state.userInfo?.email || '',
     userPhone: (state) => state.userInfo?.phoneNumber || '',
-    userRoles: (state) => state.roles || []
+    userRoles: (state) => state.roles || [],
+    profileImage: (state) => state.userInfo?.profileImage || '/images/img1.jpg',
+    settings: (state) => state.settings,
+    shareLocation: (state) => state.settings.shareLocation,
+    notifications: (state) => state.settings.notifications,
+    darkMode: (state) => state.settings.darkMode
   },
   actions: {
     async login({ commit }, payload) {
@@ -144,6 +180,7 @@ const user: Module<UserState, any> = {
     async logout({ commit }) {
       // Déconnexion locale immédiate pour une meilleure UX
       commit('CLEAR_TOKEN')
+      commit('CLEAR_USER_INFO')
       
       // Appel API en arrière-plan (non-bloquant)
       try { 
@@ -233,6 +270,44 @@ const user: Module<UserState, any> = {
         return data
       } catch (error) {
         console.error('Verify email OTP API error:', error)
+        throw error
+      }
+    },
+    // Actions pour les paramètres
+    toggleShareLocation({ commit }) {
+      commit('TOGGLE_SHARE_LOCATION')
+    },
+    toggleNotifications({ commit }) {
+      commit('TOGGLE_NOTIFICATIONS')
+    },
+    toggleDarkMode({ commit }) {
+      commit('TOGGLE_DARK_MODE')
+    },
+    updateSettings({ commit }, settings) {
+      commit('SET_SETTINGS', settings)
+    },
+    async saveSettings({ commit, state }, settings) {
+      try {
+        // Sauvegarder les paramètres sur le serveur
+        const data = await api.post('/api/v1/user/settings', {
+          ...state.settings,
+          ...settings
+        })
+        commit('SET_SETTINGS', settings)
+        return data
+      } catch (error) {
+        console.error('Save settings error:', error)
+        throw error
+      }
+    },
+    async updateProfile({ commit }, profileData) {
+      try {
+        console.log('Updating user profile:', profileData)
+        const data = await api.put('/api/v1/user/profile', profileData)
+        commit('SET_USER_INFO', data)
+        return data
+      } catch (error) {
+        console.error('Update profile error:', error)
         throw error
       }
     }

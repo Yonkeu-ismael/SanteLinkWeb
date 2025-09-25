@@ -34,7 +34,7 @@
                 <div :class="$style.text">Messages</div>
               </div>
             </div>
-            <div :class="$style.homeNavItemBase">
+            <div :class="$style.homeNavItemBase" @click="navigateToSettings">
               <div :class="$style.homeContent">
                 <div :class="$style.calendar">
                   <img src="/icons/Dashbord-ico/setting-3.svg" alt="Settings" />
@@ -218,30 +218,35 @@
     </div>
 
     <!-- Mobile Navigation Bar -->
-    <div :class="$style.mobileNavigation">
-      <div :class="[$style.mobileNavItem, $style.active]">
-        <div :class="$style.mobileIcon">
-          <img src="/icons/Dashbord-ico/home.svg" alt="Home" />
+    <div :class="$style.menuNavigation">
+      <div :class="$style.menuNavigation2">
+        <div :class="$style.masterMenuNavigation">
+          <div :class="$style.icon">
+            <img src="/icons/Dashbord-ico/home.svg" alt="Home" />
+          </div>
+          <b :class="$style.active">Home</b>
         </div>
-        <span :class="$style.mobileLabel">Home</span>
+        <div :class="$style.menuNavigationMasterMenuNavigation">
+          <div :class="$style.icon">
+            <img src="/icons/Dashbord-ico/calendar.svg" alt="Appointments" />
+          </div>
+          <div :class="$style.inactive">Appointments</div>
+        </div>
+        <div :class="$style.menuNavigationMasterMenuNavigation">
+          <div :class="$style.icon">
+            <img src="/icons/Dashbord-ico/messages.svg" alt="Messages" />
+          </div>
+          <div :class="$style.inactive">Messages</div>
+        </div>
+        <div :class="$style.menuNavigationMasterMenuNavigation" @click="navigateToSettings">
+          <div :class="$style.icon">
+            <img src="/icons/Dashbord-ico/setting-3.svg" alt="Settings" />
+          </div>
+          <div :class="$style.inactive">Settings</div>
+        </div>
       </div>
-      <div :class="$style.mobileNavItem">
-        <div :class="$style.mobileIcon">
-          <img src="/icons/Dashbord-ico/calendar.svg" alt="Appointments" />
-        </div>
-        <span :class="$style.mobileLabel">Rendez-vous</span>
-      </div>
-      <div :class="$style.mobileNavItem">
-        <div :class="$style.mobileIcon">
-          <img src="/icons/Dashbord-ico/messages.svg" alt="Messages" />
-        </div>
-        <span :class="$style.mobileLabel">Messages</span>
-      </div>
-      <div :class="$style.mobileNavItem">
-        <div :class="$style.mobileIcon">
-          <img src="/icons/Dashbord-ico/setting-3.svg" alt="Settings" />
-        </div>
-        <span :class="$style.mobileLabel">Paramètres</span>
+      <div :class="$style.homeIndicator">
+        <div :class="$style.vector" />
       </div>
     </div>
   </div>
@@ -250,11 +255,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
+const router = useRouter()
 
 // Getters pour les informations utilisateur
 const userName = computed(() => store.getters['user/userName'] || 'Utilisateur')
+
+// Méthodes de navigation
+const navigateToSettings = () => {
+  router.push('/settings')
+}
 </script>
 
 <style module>
@@ -1006,8 +1018,109 @@ const userName = computed(() => store.getters['user/userName'] || 'Utilisateur')
   text-align: center;
 }
 
+/* Mobile Navigation Styles */
+.menuNavigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  border-top: 1px solid #f3f4f6;
+  box-sizing: border-box;
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  font-size: 12px;
+  color: #d0d5dd;
+  font-family: Manrope;
+  z-index: 1000;
+}
+
+.menuNavigation2 {
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: flex-start;
+}
+
+.masterMenuNavigation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 20px;
+  gap: 4px;
+  color: #0b4a6f;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.masterMenuNavigation:hover {
+  background-color: #f5fbff;
+}
+
+.menuNavigationMasterMenuNavigation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 20px;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menuNavigationMasterMenuNavigation:hover {
+  background-color: #f5fbff;
+}
+
+.icon {
+  width: 24px;
+  position: relative;
+  height: 24px;
+}
+
+.icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.active {
+  position: relative;
+  letter-spacing: 0.2px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.inactive {
+  position: relative;
+  letter-spacing: 0.2px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+.homeIndicator {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  height: 24px;
+}
+
+.vector {
+  position: absolute;
+  bottom: 8px;
+  left: calc(50% - 66.5px);
+  border-radius: 100px;
+  background-color: #020e22;
+  width: 134px;
+  height: 5px;
+}
+
 @media (max-width: 768px) {
-  .mobileNavigation {
+  .menuNavigation {
     display: flex;
   }
 }
